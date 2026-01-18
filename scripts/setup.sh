@@ -41,10 +41,13 @@ setup_devbox_global() {
     mkdir -p ~/.local/share/devbox/global/default
     cp "$DOTFILES_DIR/devbox-global.json" ~/.local/share/devbox/global/default/devbox.json
     
-    # Install global packages
-    devbox global install
-    
-    log "Devbox global packages installed"
+    # Install global packages (continue on failure)
+    if ! devbox global install; then
+        warn "Some devbox global packages failed to install"
+        warn "You can retry later with: devbox global install"
+    else
+        log "Devbox global packages installed"
+    fi
 }
 
 #--------------------------
