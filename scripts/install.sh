@@ -109,7 +109,8 @@ partition_disk() {
     sgdisk -n 2:0:0 -t 2:8309 -c 2:"LUKS" "$DISK"
     
     partprobe "$DISK"
-    sleep 2
+    udevadm settle
+    sleep 1
 }
 
 #--------------------------
@@ -135,6 +136,12 @@ setup_luks() {
     
     # Close any existing mapping from previous attempts
     cryptsetup close cryptroot 2>/dev/null || true
+    
+    # Ensure no other process is using the partition
+    # Kill any processes using the partition (e.g., udisks2 probing)
+    fuser -sk "$luks_part" 2>/dev/null || true
+    udevadm settle
+    sleep 1
     
     cryptsetup luksFormat --type luks2 "$luks_part"
     
