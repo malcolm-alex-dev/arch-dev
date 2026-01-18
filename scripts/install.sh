@@ -133,6 +133,9 @@ setup_luks() {
     echo "  3. Enter passphrase again to unlock"
     echo ""
     
+    # Close any existing mapping from previous attempts
+    cryptsetup close cryptroot 2>/dev/null || true
+    
     cryptsetup luksFormat --type luks2 "$luks_part"
     
     cls
@@ -143,6 +146,9 @@ setup_luks() {
     echo ""
     log "Enter passphrase to unlock ${luks_part}..."
     echo ""
+    
+    # Close any existing mapping from previous attempts
+    cryptsetup close cryptroot 2>/dev/null || true
     
     cryptsetup open "$luks_part" cryptroot
 }
