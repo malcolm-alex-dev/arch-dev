@@ -68,7 +68,7 @@ link_dotfiles() {
     for dir in */; do
         dir="${dir%/}"
         log "  Linking $dir..."
-        stow -v -R -t ~ "$dir"
+        stow -v -R --adopt -t ~ "$dir"
     done
     
     log "Dotfiles linked"
