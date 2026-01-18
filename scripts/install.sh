@@ -205,8 +205,8 @@ setup_btrfs() {
 install_base() {
     log "Installing base system..."
     
-    # Update mirrorlist
-    reflector --country US --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+    # Update mirrorlist (use --download-timeout to avoid 5s default timeout failures)
+    reflector --country US --age 12 --protocol https --sort rate --download-timeout 15 --latest 10 --save /etc/pacman.d/mirrorlist
     
     # Install base packages
     local packages=(
@@ -268,15 +268,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # Create user
 useradd -m -G wheel -s /bin/zsh ${USERNAME}
-printf '\033[2J\033[H' >/dev/tty
-echo ""
-echo "========================================"
-echo "  Set password for user: ${USERNAME}"
-echo "========================================"
-echo ""
-until passwd ${USERNAME}; do
-    echo "Password mismatch, try again..."
-done
 
 # Sudo
 echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
@@ -284,18 +275,28 @@ echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
 # Enable services
 systemctl enable NetworkManager
 
-# Set root password
-printf '\033[2J\033[H' >/dev/tty
-echo ""
-echo "========================================"
-echo "  Set password for root"
-echo "========================================"
-echo ""
-until passwd; do
-    echo "Password mismatch, try again..."
-done
-
 CHROOT
+
+    # Set passwords outside heredoc so TTY works properly
+    cls
+    echo ""
+    echo "========================================"
+    echo "  Set password for user: ${USERNAME}"
+    echo "========================================"
+    echo ""
+    until arch-chroot /mnt passwd ${USERNAME}; do
+        echo "Password mismatch, try again..."
+    done
+
+    cls
+    echo ""
+    echo "========================================"
+    echo "  Set password for root"
+    echo "========================================"
+    echo ""
+    until arch-chroot /mnt passwd; do
+        echo "Password mismatch, try again..."
+    done
 }
 
 #--------------------------
