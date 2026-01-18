@@ -249,13 +249,14 @@ install_packages() {
             polkit-gnome \
             brightnessctl pamixer grim slurp wl-clipboard \
             ttf-jetbrains-mono-nerd noto-fonts noto-fonts-emoji \
-            snapper snap-pac \
+            snapper snap-pac grub-btrfs inotify-tools \
             iwd
     fi
     
-    # Snapper config
+    # Snapper config + grub-btrfs
     if [[ "$VARIANT" == "desktop" ]]; then
         arch-chroot /mnt /bin/bash <<CHROOT
+# Configure snapper
 umount /.snapshots || true
 rm -rf /.snapshots
 snapper -c root create-config /
@@ -263,6 +264,12 @@ btrfs subvolume delete /.snapshots || true
 mkdir /.snapshots
 mount -a
 chmod 750 /.snapshots
+
+# Enable grub-btrfs daemon to auto-update grub menu when snapshots change
+systemctl enable grub-btrfsd
+
+# Regenerate grub config to include snapshot entries
+grub-mkconfig -o /boot/grub/grub.cfg
 CHROOT
     fi
 }

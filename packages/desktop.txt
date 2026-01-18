@@ -18,6 +18,8 @@ cryptsetup
 # Snapshots
 snapper
 snap-pac
+grub-btrfs
+inotify-tools
 
 # Network
 networkmanager
