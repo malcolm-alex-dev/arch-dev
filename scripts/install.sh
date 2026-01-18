@@ -30,11 +30,18 @@ NC='\033[0m'
 log() { echo -e "${GREEN}[*]${NC} $1"; }
 warn() { echo -e "${YELLOW}[!]${NC} $1"; }
 error() { echo -e "${RED}[!]${NC} $1"; exit 1; }
+cls() { printf '\033[2J\033[H' >/dev/tty; }
 
 #--------------------------
 # Pre-flight checks
 #--------------------------
 select_disk() {
+    cls
+    echo ""
+    echo "========================================"
+    echo "  Select Installation Disk"
+    echo "========================================"
+    echo ""
     log "Available disks:"
     echo ""
     lsblk -d -o NAME,SIZE,MODEL | grep -v "^loop"
@@ -55,12 +62,23 @@ preflight() {
     
     select_disk
     
+    cls
+    echo ""
+    echo "========================================"
+    echo "  Installation Configuration"
+    echo "========================================"
+    echo ""
     warn "This will ERASE ${DISK}. Press Ctrl+C to abort."
     echo ""
     read -p "Enter hostname [$HOSTNAME]: " input && HOSTNAME="${input:-$HOSTNAME}"
     read -p "Enter username [$USERNAME]: " input && USERNAME="${input:-$USERNAME}"
     read -p "Enter timezone [$TIMEZONE]: " input && TIMEZONE="${input:-$TIMEZONE}"
     
+    cls
+    echo ""
+    echo "========================================"
+    echo "  Confirm Installation"
+    echo "========================================"
     echo ""
     log "Configuration:"
     echo "  Variant:  $VARIANT"
@@ -98,12 +116,34 @@ partition_disk() {
 # Setup LUKS encryption
 #--------------------------
 setup_luks() {
-    log "Setting up LUKS encryption..."
-    
     local luks_part="${DISK}2"
     [[ "$DISK" == *nvme* ]] && luks_part="${DISK}p2"
     
+    cls
+    echo ""
+    echo "========================================"
+    echo "  LUKS Encryption Setup"
+    echo "========================================"
+    echo ""
+    log "Setting up LUKS encryption on ${luks_part}..."
+    echo ""
+    echo "You will be asked to:"
+    echo "  1. Type YES (uppercase) to confirm"
+    echo "  2. Enter encryption passphrase (twice)"
+    echo "  3. Enter passphrase again to unlock"
+    echo ""
+    
     cryptsetup luksFormat --type luks2 "$luks_part"
+    
+    cls
+    echo ""
+    echo "========================================"
+    echo "  Unlock Encrypted Partition"
+    echo "========================================"
+    echo ""
+    log "Enter passphrase to unlock ${luks_part}..."
+    echo ""
+    
     cryptsetup open "$luks_part" cryptroot
 }
 
@@ -215,7 +255,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # Create user
 useradd -m -G wheel -s /bin/zsh ${USERNAME}
-clear
+printf '\033[2J\033[H' >/dev/tty
 echo ""
 echo "========================================"
 echo "  Set password for user: ${USERNAME}"
@@ -232,7 +272,7 @@ echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
 systemctl enable NetworkManager
 
 # Set root password
-clear
+printf '\033[2J\033[H' >/dev/tty
 echo ""
 echo "========================================"
 echo "  Set password for root"
