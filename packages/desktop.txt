@@ -1,0 +1,64 @@
+# Minimal Arch packages for desktop install
+# Install with: pacman -S --needed - < packages/desktop.txt
+
+# Base system
+base
+linux
+linux-firmware
+intel-ucode
+
+# Boot
+grub
+efibootmgr
+
+# Filesystem & encryption
+btrfs-progs
+cryptsetup
+
+# Snapshots
+snapper
+snap-pac
+
+# Network
+networkmanager
+iwd
+
+# Audio
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+
+# Wayland / Hyprland
+hyprland
+xdg-desktop-portal-hyprland
+qt5-wayland
+qt6-wayland
+
+# Terminal & shell
+ghostty
+zsh
+
+# Status bar & notifications
+waybar
+mako
+
+# Launcher
+wofi
+
+# Screen lock
+hyprlock
+hypridle
+
+# Fonts
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-emoji
+
+# Utilities (minimal - most go in devbox)
+brightnessctl
+pamixer
+grim
+slurp
+wl-clipboard
+polkit-gnome

@@ -1,0 +1,26 @@
+# Minimal Arch packages for headless server
+# Install with: pacman -S --needed - < packages/server.txt
+
+# Base system
+base
+linux
+linux-firmware
+intel-ucode
+
+# Boot
+grub
+efibootmgr
+
+# Filesystem & encryption
+btrfs-progs
+cryptsetup
+
+# Snapshots
+snapper
+
+# Network
+networkmanager
+openssh
+
+# Shell
+zsh

@@ -1,0 +1,61 @@
+/* Minimal Waybar Style - Nord-inspired */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: rgba(46, 52, 64, 0.9);
+    color: #eceff4;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #d8dee9;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+#workspaces button:hover {
+    background: rgba(136, 192, 208, 0.2);
+}
+
+#workspaces button.active {
+    color: #88c0d0;
+    border-bottom: 2px solid #88c0d0;
+}
+
+#workspaces button.urgent {
+    color: #bf616a;
+}
+
+#window {
+    color: #d8dee9;
+}
+
+#clock,
+#battery,
+#network,
+#pulseaudio {
+    padding: 0 12px;
+    color: #eceff4;
+}
+
+#battery.warning {
+    color: #ebcb8b;
+}
+
+#battery.critical {
+    color: #bf616a;
+}
+
+#network.disconnected {
+    color: #bf616a;
+}
+
+#pulseaudio.muted {
+    color: #4c566a;
+}
