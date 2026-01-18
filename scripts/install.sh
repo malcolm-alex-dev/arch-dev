@@ -17,7 +17,7 @@ set -euo pipefail
 VARIANT="${1:-desktop}"  # desktop or server
 HOSTNAME="archbox"
 USERNAME="user"
-TIMEZONE="America/Los_Angeles"
+TIMEZONE="America/New_York"
 LOCALE="en_US.UTF-8"
 KEYMAP="us"
 
@@ -215,8 +215,15 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # Create user
 useradd -m -G wheel -s /bin/zsh ${USERNAME}
-echo "Set password for ${USERNAME}:"
-passwd ${USERNAME}
+clear
+echo ""
+echo "========================================"
+echo "  Set password for user: ${USERNAME}"
+echo "========================================"
+echo ""
+until passwd ${USERNAME}; do
+    echo "Password mismatch, try again..."
+done
 
 # Sudo
 echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
@@ -225,8 +232,15 @@ echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
 systemctl enable NetworkManager
 
 # Set root password
-echo "Set root password:"
-passwd
+clear
+echo ""
+echo "========================================"
+echo "  Set password for root"
+echo "========================================"
+echo ""
+until passwd; do
+    echo "Password mismatch, try again..."
+done
 
 CHROOT
 }

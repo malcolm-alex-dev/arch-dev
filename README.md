@@ -44,13 +44,32 @@ A lightweight, devbox-centric Arch Linux configuration for development workstati
 
 ### Fresh Install (from Arch ISO)
 
-```bash
-# Boot Arch ISO, connect to network (iwctl for wifi), then:
-bash <(curl -sL https://raw.githubusercontent.com/YOUR_USER/dotfiles/main/scripts/install.sh)
+1. Boot the Arch ISO
 
-# Or for server variant:
-bash <(curl -sL https://raw.githubusercontent.com/YOUR_USER/dotfiles/main/scripts/install.sh) server
-```
+2. Connect to the network:
+   ```bash
+   # For WiFi
+   iwctl
+   # Then inside iwctl:
+   #   station wlan0 scan
+   #   station wlan0 get-networks
+   #   station wlan0 connect <network-name>
+   #   exit
+
+   # For Ethernet (usually auto-connects, but if not):
+   dhcpcd
+   ```
+
+3. Download and run the install script:
+   ```bash
+   curl -sL https://raw.githubusercontent.com/YOUR_USER/dotfiles/main/scripts/install.sh -o install.sh
+   bash install.sh
+
+   # Or for server variant:
+   bash install.sh server
+   ```
+
+> **Note**: Download the script first rather than piping directly to bash. The installer has interactive prompts (especially for LUKS encryption) that can get hidden when piping.
 
 ### Post-Install Setup
 
