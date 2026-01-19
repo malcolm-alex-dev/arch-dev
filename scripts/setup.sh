@@ -125,7 +125,7 @@ finish() {
     log "Setup complete!"
     echo ""
     echo "To start Hyprland:"
-    echo "  Log out and log back in, or run: Hyprland"
+    echo "  Log out and log back in, or run: start-hyprland"
     echo ""
     echo "Your devbox global tools are ready. Run 'devbox global list' to see them."
     echo ""

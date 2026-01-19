@@ -311,7 +311,7 @@ install_packages() {
     if [[ "$VARIANT" == "desktop" ]]; then
         arch-chroot /mnt pacman -S --needed --noconfirm \
             hyprland xdg-desktop-portal-hyprland qt5-wayland qt6-wayland \
-            ghostty waybar mako wofi \
+            alacritty waybar mako wofi \
             hyprlock hypridle \
             pipewire pipewire-pulse pipewire-alsa wireplumber \
             polkit-gnome \
